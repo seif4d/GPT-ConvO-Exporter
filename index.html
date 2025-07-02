@@ -1,0 +1,481 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT-ConvO-Exporter | صدر محادثاتك بأسلوب أسطوري</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- المتغيرات العامة والألوان --- */
+        :root {
+            --dark-bg: #0d0d0f;
+            --card-bg: #1a1b26;
+            --neon-primary: #00f2ff;
+            --neon-secondary: #ff00c1;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a9a9a9;
+            --border-color: #333652;
+        }
+
+        /* --- إعادة تعيين وتنسيق أساسي --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 1% 1%, rgba(0, 242, 255, 0.1) 0%, transparent 30%),
+                              radial-gradient(circle at 99% 99%, rgba(255, 0, 193, 0.1) 0%, transparent 40%);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- قسم الهيدر الرئيسي (Hero) --- */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            font-weight: 900;
+            color: var(--neon-primary);
+            text-shadow: 0 0 5px var(--neon-primary), 0 0 15px var(--neon-primary), 0 0 30px rgba(0, 242, 255, 0.5);
+            margin-bottom: 20px;
+            animation: flicker 3s infinite alternate;
+        }
+
+        .hero p.subtitle {
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin-bottom: 40px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background-color: var(--neon-primary);
+            color: var(--dark-bg);
+            box-shadow: 0 0 10px var(--neon-primary), 0 0 20px var(--neon-primary);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px var(--neon-primary), 0 0 35px var(--neon-primary), 0 0 50px var(--neon-primary);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: var(--neon-secondary);
+            border: 2px solid var(--neon-secondary);
+            box-shadow: 0 0 10px var(--neon-secondary) inset;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--neon-secondary);
+            color: var(--dark-bg);
+            box-shadow: 0 0 15px var(--neon-secondary), 0 0 25px var(--neon-secondary);
+        }
+
+        /* --- الأقسام العامة --- */
+        section {
+            padding: 100px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            color: var(--text-primary);
+            position: relative;
+        }
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--neon-primary), var(--neon-secondary));
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        /* --- قسم المميزات --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3), 0 0 20px rgba(0, 242, 255, 0.1);
+        }
+        .feature-card .icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--neon-primary);
+            text-shadow: 0 0 10px var(--neon-primary);
+        }
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--text-primary);
+        }
+
+        /* --- قسم طريقة الاستخدام --- */
+        .how-to-steps {
+            list-style: none;
+            counter-reset: steps-counter;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .how-to-steps li {
+            counter-increment: steps-counter;
+            background: var(--card-bg);
+            padding: 25px 25px 25px 70px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border-left: 4px solid var(--neon-primary);
+            position: relative;
+        }
+        .how-to-steps li::before {
+            content: counter(steps-counter);
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--neon-primary);
+            text-shadow: 0 0 10px var(--neon-primary);
+        }
+
+        /* --- قسم الصورة التوضيحية --- */
+        .demo-image {
+            display: block;
+            max-width: 100%;
+            margin: 0 auto;
+            border-radius: 12px;
+            border: 3px solid var(--neon-secondary);
+            box-shadow: 0 0 25px rgba(255, 0, 193, 0.3);
+        }
+
+        /* --- قسم السكريبتات --- */
+        .scripts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .script-card {
+            background: var(--card-bg);
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            padding: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .script-info h3 {
+            color: var(--neon-primary);
+            font-size: 1.4rem;
+        }
+        .copy-btn {
+            background-color: transparent;
+            color: var(--text-primary);
+            border: 2px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        .copy-btn:hover {
+            background-color: var(--neon-primary);
+            color: var(--dark-bg);
+            border-color: var(--neon-primary);
+        }
+        .copy-btn.copied {
+            background-color: var(--neon-secondary);
+            color: var(--dark-bg);
+            border-color: var(--neon-secondary);
+        }
+
+        /* --- الفوتر --- */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 60px;
+        }
+        footer p {
+            color: var(--text-secondary);
+        }
+        footer a {
+            color: var(--neon-primary);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        /* --- حركات إضافية --- */
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow: 0 0 4px var(--neon-primary), 0 0 11px var(--neon-primary), 0 0 19px var(--neon-primary), 0 0 40px var(--neon-primary), 0 0 80px rgba(0,242,255,0.5);
+            }
+            20%, 24%, 55% {       
+                text-shadow: none;
+            }
+        }
+
+        /* --- التجاوب مع الشاشات --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; }
+            .hero p.subtitle { font-size: 1.1rem; }
+            .section-title { font-size: 2rem; }
+            .script-card { flex-direction: column; align-items: flex-start; }
+        }
+
+        /* --- تأثير الظهور عند التمرير --- */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- =======================
+         الهيدر الرئيسي
+    ======================== -->
+    <header class="hero">
+        <div class="container">
+            <h1 class="fade-in">GPT-ConvO-Exporter</h1>
+            <p class="subtitle fade-in" style="transition-delay: 0.2s;">
+                حوّل محادثاتك مع الذكاء الاصطناعي إلى كنوز معرفية. أطلق العنان لقوة التصدير بأسلوب احترافي لمنصاتك المفضلة مثل Obsidian و Logseq.
+            </p>
+            <div class="cta-buttons fade-in" style="transition-delay: 0.4s;">
+                <a href="#scripts" class="btn btn-primary">ابدأ تحميل السكريبتات</a>
+                <a href="https://github.com/seif4d/GPT-ConvO-Exporter" target="_blank" class="btn btn-secondary">اذهب إلى GitHub</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- =======================
+             قسم المميزات
+        ======================== -->
+        <section id="features" class="container">
+            <h2 class="section-title fade-in">لماذا مشروعنا أسطوري؟</h2>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <div class="icon">🗂️</div>
+                    <h3>تنسيقات متعددة</h3>
+                    <p>اختر من بين تنسيقات مصممة خصيصًا لـ Logseq و Obsidian (بأشكالها المختلفة)، أو اختر تنسيق Markdown العام الذي يعمل في كل مكان.</p>
+                </div>
+                <div class="feature-card fade-in" style="transition-delay: 0.2s;">
+                    <div class="icon">💎</div>
+                    <h3>تصميم احترافي</h3>
+                    <p>لا مزيد من النصوص العادية. احصل على ملفات منظمة ببيانات وصفية (YAML)، وعناوين واضحة، وحتى Callouts جذابة في Obsidian.</p>
+                </div>
+                <div class="feature-card fade-in" style="transition-delay: 0.4s;">
+                    <div class="icon">🚀</div>
+                    <h3>سهولة فائقة</h3>
+                    <p>انسخ، الصق، واضغط Enter. هذه هي كل الخطوات التي تحتاجها لتحويل أي محادثة إلى ملف جاهز على جهازك في ثوانٍ معدودة.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- =======================
+             قسم طريقة الاستخدام
+        ======================== -->
+        <section id="how-to" class="container">
+            <h2 class="section-title fade-in">3 خطوات نحو السحر</h2>
+            <ol class="how-to-steps">
+                <li class="fade-in"><strong>افتح الكونسول:</strong> في صفحة محادثة ChatGPT، اضغط `F12` أو `Ctrl+Shift+I` لفتح أدوات المطور، ثم اذهب إلى تبويب `Console`.</li>
+                <li class="fade-in" style="transition-delay: 0.2s;"><strong>انسخ وألصق:</strong> اختر السكريبت الذي تريده من الأسفل، انسخ الكود بالكامل، وألصقه في الكونسول.</li>
+                <li class="fade-in" style="transition-delay: 0.4s;"><strong>اضغط Enter:</strong> اضغط على مفتاح Enter وشاهد متصفحك يبدأ في تحميل ملف `.md` المنسق والجاهز فورًا!</li>
+            </ol>
+        </section>
+        
+        <!-- =======================
+             قسم الصورة التوضيحية
+        ======================== 
+        <section id="demo" class="container">
+            <h2 class="section-title fade-in">شاهد النتيجة بنفسك</h2>
+            <img src="https://i.imgur.com/k2j1C8C.png" alt="مثال على شكل المحادثة المصدرة في Obsidian باستخدام Callouts" class="demo-image fade-in">
+        </section>
+-->
+
+        <!-- =======================
+             قسم السكريبتات
+        ======================== -->
+        <section id="scripts" class="container">
+            <h2 class="section-title fade-in">اختر سلاحك المعرفي</h2>
+            <div class="scripts-container">
+                
+                <div class="script-card fade-in">
+                    <div class="script-info">
+                        <h3>💎 Obsidian (Callouts)</h3>
+                        <p>الخيار الأكثر جمالًا. يستخدم Callouts قابلة للطي بأيقونات مميزة.</p>
+                    </div>
+                    <button class="copy-btn" data-script-id="obsidian-callouts">نسخ الكود</button>
+                </div>
+                
+                <div class="script-card fade-in">
+                    <div class="script-info">
+                        <h3>🔥 Logseq (Outliner)</h3>
+                        <p>مثالي لمستخدمي Logseq. يحافظ على بنية البلوكات المتداخلة.</p>
+                    </div>
+                    <button class="copy-btn" data-script-id="logseq">نسخ الكود</button>
+                </div>
+
+                <div class="script-card fade-in">
+                    <div class="script-info">
+                        <h3>✍️ Obsidian (Simple)</h3>
+                        <p>تنسيق بسيط ونظيف يستخدم العناوين والاقتباسات للترتيب.</p>
+                    </div>
+                    <button class="copy-btn" data-script-id="obsidian-simple">نسخ الكود</button>
+                </div>
+
+                <div class="script-card fade-in">
+                    <div class="script-info">
+                        <h3>📜 Generic Markdown</h3>
+                        <p>تنسيق عام ومتوافق مع أي محرر نصوص يدعم Markdown.</p>
+                    </div>
+                    <button class="copy-btn" data-script-id="generic-markdown">نسخ الكود</button>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =======================
+         الفوتر
+    ======================== -->
+    <footer>
+        <div class="container">
+            <p>صُنع هذا المشروع بحب وشغف بواسطة <a href="https://github.com/seif4d" target="_blank">seif4d</a> 🥷🏻 ورفيقه الذكاء الاصطناعي.</p>
+            <p>إن أعجبك المشروع، لا تنسَ ترك ⭐ على <a href="https://github.com/seif4d/GPT-ConvO-Exporter" target="_blank">GitHub</a>.</p>
+        </div>
+    </footer>
+
+    <!-- =======================
+         مخزن أكواد السكريبتات (مخفي)
+    ======================== -->
+    <div id="scripts-storage" style="display:none;">
+        <pre id="obsidian-callouts">// الكود الكامل لـ Obsidian Callouts يوضع هنا
+(function(){console.log("Obsidian Callouts script ready!")})();</pre>
+        <pre id="logseq">// الكود الكامل لـ Logseq يوضع هنا
+(function(){console.log("Logseq script ready!")})();</pre>
+        <pre id="obsidian-simple">// الكود الكامل لـ Obsidian Simple يوضع هنا
+(function(){console.log("Obsidian Simple script ready!")})();</pre>
+        <pre id="generic-markdown">// الكود الكامل لـ Generic Markdown يوضع هنا
+(function(){console.log("Generic Markdown script ready!")})();</pre>
+    </div>
+
+    <script>
+        // --- JavaScript للوظائف ---
+
+        // 1. وظيفة نسخ الكود إلى الحافظة
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const scriptId = button.dataset.scriptId;
+                const scriptContent = document.getElementById(scriptId).textContent;
+                
+                navigator.clipboard.writeText(scriptContent).then(() => {
+                    // تم النسخ بنجاح
+                    const originalText = button.textContent;
+                    button.textContent = 'تم النسخ! ✅';
+                    button.classList.add('copied');
+                    
+                    setTimeout(() => {
+                        button.textContent = originalText;
+                        button.classList.remove('copied');
+                    }, 2000);
+                }).catch(err => {
+                    console.error('فشل النسخ: ', err);
+                    alert('عذرًا، حدث خطأ أثناء محاولة نسخ الكود.');
+                });
+            });
+        });
+
+        // 2. وظيفة إظهار العناصر عند التمرير
+        const fadeInObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.1 // يظهر العنصر عند رؤية 10% منه
+        });
+
+        document.querySelectorAll('.fade-in').forEach(element => {
+            fadeInObserver.observe(element);
+        });
+
+        // ملاحظة هامة: يجب عليك لصق الأكواد الكاملة للسكريبتات الأربعة في قسم "scripts-storage" المخفي في الأعلى.
+        // لقد وضعتُ أكوادًا وهمية كأمثلة.
+    </script>
+</body>
+</html>
