@@ -42,12 +42,7 @@
 | `markdown-generic-export.js` | صيغة Markdown عامة تصلح لأي محرر |
 
 ---
-
-## 🖼️ مثال بالصور
-
-<img src="https://i.imgur.com/k2j1C8C.png" alt="Obsidian Callouts Example" width="600"/>
-
----
+ 
 
 ## ⚖️ الترخيص
 
@@ -62,3 +57,59 @@
 هذا المشروع صُنع في ليالي طويلة ملهمة 🥷🏻⚔️ .  
 لو أعجبك وأفادك، **ضع ⭐ في GitHub** فهذا يسعدنا جدًا ❤️.
 
+---
+
+# 🧠 GPT-ConvO-Exporter
+
+Scripts to export your ChatGPT conversations into beautifully formatted Markdown files, tailor-made for your Personal Knowledge Management (PKM) system like **Obsidian** and **Logseq**.
+
+*(You can replace this with your own screenshot!)*
+
+---
+
+## ✨ Features
+
+- ✅ **Multiple Formats:** Choose the perfect export format for your needs.
+- 🔥 **Logseq Outliner:** Preserves the block-based structure, perfect for outlining and folding.
+- 💎 **Obsidian Callouts:** Creates a visually stunning and organized conversation using Obsidian's callout feature.
+- ✍️ **Obsidian Simple:** A clean, readable Markdown format for a classic notes look.
+- 📜 **Generic Markdown:** A standard format compatible with any Markdown editor.
+- ⚙️ **Automatic Metadata:** Adds YAML frontmatter (title, tags, date) for better organization in Obsidian.
+- 💻 **Full Formatting Support:** Correctly handles code blocks (with language detection), lists, quotes, bold/italic text, and more.
+
+---
+
+## 🛠️ How to Use
+
+It's as simple as this:
+
+1.  On a ChatGPT conversation page, open your browser's **Developer Console** (`F12` or `Ctrl+Shift+I`).
+2.  Navigate to the **Console** tab.
+3.  Copy the entire code from one of the script files.
+4.  Paste it into the console and press `Enter`.
+5.  Your `.md` file will start downloading immediately! 🚀
+
+---
+
+## ⚔️ The Scripts
+
+| File                       | Description                                                     | Best For                               |
+| -------------------------- | --------------------------------------------------------------- | -------------------------------------- |
+| `logseq-export.js`         | Exports as a nested list, respecting Logseq's outliner structure. | **Logseq** users                       |
+| `obsidian-callouts-export.js`| Uses stylish callouts (`[!QUESTION]`, `[!TIP]`) for each turn.  | **Obsidian** users who love visuals    |
+| `obsidian-simple-export.js`| Uses headers and blockquotes for a clean, readable format.      | **Obsidian** users who prefer simplicity |
+| `markdown-generic-export.js` | A standard Markdown export with headers and separators.         | Any other Markdown app (Notion, etc.)  |
+
+---
+
+## ⚖️ License
+
+This project is licensed under the MIT License. (You should create a `LICENSE` file for this).
+
+---
+
+## 💌 Credits
+
+This project was forged by **seif4d** 🥷🏻 and his AI companion.
+
+If you like this project, don't forget to leave a ⭐ on GitHub!
