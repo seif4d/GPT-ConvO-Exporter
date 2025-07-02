@@ -1,0 +1,402 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <!-- Basic Meta Tags -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPT-ConvO-Exporter | صدّر محادثاتك بأسلوب أسطوري</title>
+    <meta name="description" content="مجموعة سكريبتات لتحويل محادثات ChatGPT إلى ملفات Markdown متوافقة مع Logseq و Obsidian، مصممة ببراعة لتنظيم المعرفة الشخصي.">
+
+    <!-- Google Fonts: Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Inline CSS for Single-File Deployment -->
+    <style>
+        /* ------------------------- */
+        /* ----- GLOBAL STYLES ----- */
+        /* ------------------------- */
+        :root {
+            --bg-color: #121212;
+            --primary-color: #1e1e1e;
+            --secondary-color: #2a2a2a;
+            --accent-color-1: #007BFF;
+            --accent-color-2: #8a2be2;
+            --text-color: #e0e0e0;
+            --text-muted: #a0a0a0;
+            --font-primary: 'Poppins', 'Tajawal', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.7;
+            overflow-x: hidden;
+            background-image: linear-gradient(180deg, var(--bg-color) 0%, #1a1a1a 100%);
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* ------------------------- */
+        /* -------- NAVBAR --------- */
+        /* ------------------------- */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1.2rem 0;
+            background: rgba(18, 18, 18, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-color);
+            text-decoration: none;
+        }
+
+        .navbar .logo i {
+            margin-left: 8px;
+            color: var(--accent-color-1);
+        }
+
+        .navbar .nav-link {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            transition: color 0.3s, transform 0.3s;
+        }
+
+        .navbar .nav-link:hover {
+            color: var(--accent-color-2);
+            transform: scale(1.1);
+        }
+        
+        /* ------------------------- */
+        /* --------- HERO ---------- */
+        /* ------------------------- */
+        .hero {
+            min-height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 120px 0 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(138, 43, 226, 0.1), transparent 70%);
+            z-index: -1;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--accent-color-1), var(--accent-color-2));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* ------------------------- */
+        /* -------- SCRIPTS -------- */
+        /* ------------------------- */
+        .scripts-section {
+            padding: 60px 0;
+        }
+
+        .scripts-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .scripts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+        
+        .script-card {
+            background: var(--primary-color);
+            border: 1px solid var(--secondary-color);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .script-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .script-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .script-card .icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color-1);
+        }
+        
+        .script-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-color);
+        }
+
+        .script-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            min-height: 80px;
+        }
+        
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            background: linear-gradient(90deg, var(--accent-color-1), var(--accent-color-2));
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-family: var(--font-primary);
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.3);
+        }
+
+        .btn i {
+            margin-left: 8px;
+        }
+
+        /* ------------------------- */
+        /* -------- FOOTER --------- */
+        /* ------------------------- */
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 4rem;
+            border-top: 1px solid var(--secondary-color);
+            color: var(--text-muted);
+        }
+
+        .footer a {
+            color: var(--accent-color-1);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* ------------------------- */
+        /* ------ RESPONSIVE ------- */
+        /* ------------------------- */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .scripts-section h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ================== -->
+    <!-- ====== NAVBAR ====== -->
+    <!-- ================== -->
+    <header class="navbar">
+        <div class="container">
+            <a href="#" class="logo"><i class="fas fa-brain"></i>GPT-ConvO-Exporter</a>
+            <a href="https://github.com/seif4d/GPT-ConvO-Exporter" target="_blank" class="nav-link" aria-label="GitHub Repository">
+                <i class="fab fa-github"></i>
+            </a>
+        </div>
+    </header>
+
+    <!-- ================== -->
+    <!-- ====== HERO ====== -->
+    <!-- ================== -->
+    <main class="hero">
+        <div class="container">
+            <h1>حوّل محادثاتك إلى معرفة منظمة</h1>
+            <p>مجموعة سكريبتات ذكية بنقرة واحدة لتحويل محادثات ChatGPT إلى ملفات Markdown أسطورية، جاهزة لعرين معرفتك مثل Obsidian و Logseq.</p>
+        </div>
+    </main>
+
+    <!-- ================== -->
+    <!-- ===== SCRIPTS ==== -->
+    <!-- ================== -->
+    <section class="scripts-section">
+        <div class="container">
+            <h2>اختر سلاحك المعرفي ⚔️</h2>
+            <div class="scripts-grid">
+                
+                <!-- Card 1: Obsidian Callouts -->
+                <div class="script-card">
+                    <div class="icon"><i class="fas fa-gem"></i></div>
+                    <h3>Obsidian - Callouts</h3>
+                    <p>يحول المحادثة إلى لوحات فنية قابلة للطي باستخدام ميزة Callouts الجذابة في Obsidian.</p>
+                    <button class="btn" data-script="obsidian-callouts"><i class="fas fa-copy"></i>نسخ الكود</button>
+                </div>
+
+                <!-- Card 2: Logseq -->
+                <div class="script-card">
+                    <div class="icon"><i class="fas fa-sitemap"></i></div>
+                    <h3>Logseq - Outliner</h3>
+                    <p>يحافظ على بنية المحادثة كقوائم متداخلة، مثالية لأسلوب الـ Outliner في Logseq.</p>
+                    <button class="btn" data-script="logseq"><i class="fas fa-copy"></i>نسخ الكود</button>
+                </div>
+
+                <!-- Card 3: Obsidian Simple -->
+                <div class="script-card">
+                    <div class="icon"><i class="fas fa-pen-nib"></i></div>
+                    <h3>Obsidian - Simple</h3>
+                    <p>تنسيق بسيط ونظيف باستخدام العناوين والاقتباسات، للقراءة المريحة في Obsidian.</p>
+                    <button class="btn" data-script="obsidian-simple"><i class="fas fa-copy"></i>نسخ الكود</button>
+                </div>
+                
+                <!-- Card 4: Generic Markdown -->
+                <div class="script-card">
+                    <div class="icon"><i class="fab fa-markdown"></i></div>
+                    <h3>Markdown - Generic</h3>
+                    <p>صيغة Markdown معيارية ونظيفة، تعمل مع أي محرر نصوص مثل Notion أو VS Code.</p>
+                    <button class="btn" data-script="markdown-generic"><i class="fas fa-copy"></i>نسخ الكود</button>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ================== -->
+    <!-- ===== FOOTER ===== -->
+    <!-- ================== -->
+    <footer class="footer">
+        <div class="container">
+            <p>مرخص تحت <a href="https://github.com/seif4d/GPT-ConvO-Exporter/blob/main/LICENSE" target="_blank">رخصة MIT</a>.</p>
+            <p>صُنع بحب 🖤 بواسطة <a href="https://github.com/seif4d" target="_blank">seif4d</a> ونديمه الذكاء الاصطناعي.</p>
+        </div>
+    </footer>
+
+
+    <!-- ===================== -->
+    <!-- ===== JAVASCRIPT ==== -->
+    <!-- ===================== -->
+    <script>
+        // Store all script contents here.
+        // It's better to manage them in one place.
+        const scripts = {
+            'logseq': `(function(){console.log("🚀 جاري إعادة الاستخراج والتنسيق بأسلوب Logseq الأصلي...");function e(e,o="  - "){let t="";switch(e.nodeName){case"P":t+=\`\${o}\${e.innerText.replace(/\\n/g," ")}\\n\`;break;case"UL":case"OL":Array.from(e.children).forEach(s=>{t+=\`\${o}\${"OL"===e.nodeName?"1. ":"* "}\${s.innerText.trim()}\\n\`});break;case"H2":t+=\`\${o}## \${e.innerText.trim()}\\n\`;break;case"H3":t+=\`\${o}### \${e.innerText.trim()}\\n\`;break;case"PRE":const s=e.querySelector(".justify-between")?.innerText.trim()||"",n=e.querySelector("code")?.innerText||"";t+=\`\${o}\`\`\`\${s}\\n\${n.trim()}\\n\`\`\`\\n\`;break;case"BLOCKQUOTE":const a=Array.from(e.childNodes).map(e=>e.innerText||e.textContent).join("\\n");t+=\`\${o}> \${a.replace(/\\n/g,"\\n> ")}\\n\`;break;case"HR":t+=\`\${o}---\\n\`;break;default:e.nodeType===Node.COMMENT_NODE||""===e.textContent.trim()||console.log(\`عقدة غير معالجة: \${e.nodeName}\`)}return t}const o=document.querySelectorAll('[data-testid^="conversation-turn-"]'),t=[];let s=document.title||"محادثة ChatGPT";const n=new Date,a=\`[[\${n.getFullYear()}-\${String(n.getMonth()+1).padStart(2,"0")}-\${String(n.getDate()).padStart(2,"0")}]]\`;t.push(\`- title:: \${s}\`),t.push("- tags:: #محادثة, #chatgpt-export"),t.push(\`- created:: \${a}\\n\`),t.push("- ## المحادثة 📜\\n"),o.forEach(o=>{const s=o.querySelector('div[data-message-author-role="user"] .whitespace-pre-wrap'),n=o.querySelector('div[data-message-author-role="assistant"] .markdown.prose');s&&s.innerText.trim()?(t.push("  - 🧑‍💻 **المستخدم**"),s.innerText.trim().split("\\n").forEach(e=>{t.push(\`    - \${e}\`)})):n&&(t.push("  - 🤖 **المساعد**"),Array.from(n.children).forEach(o=>{t.push(e(o,"    - "))}))}),t.length<=4?console.error("😔 لم يتم العثور على محتوى. هل أنت في صفحة المحادثة؟"):void 0===(s=s.replace(/[\\/\\\\?%*:|\\"<>]/g,"-").replace(/\\s+/g," "))||(s=s.replace(/[\\/\\\\?%*:|\\"<>]/g,"-").replace(/\\s+/g," "));const r=URL.createObjectURL(new Blob([t.filter(e=>""!==e.trim()).join("\\n")],{type:"text/markdown;charset=utf-8"})),c=document.createElement("a");c.href=r,c.download=\`\${s}.md\`,document.body.appendChild(c),c.click(),document.body.removeChild(c),URL.revokeObjectURL(r),console.log(\`✅🎉 تمت العملية بنجاح! تم تحميل ملف "\${c.download}" المتوافق تمامًا مع Logseq.\`)})();`,
+            
+            'obsidian-callouts': `(function(){console.log("🚀 جاري استخراج المحادثة وتحويلها إلى تحفة فنية لـ Obsidian...");function e(e){let t="";return Array.from(e.childNodes).forEach(o=>{switch(o.nodeName){case"#text":t+=o.textContent;break;case"P":t+="\\n"+e(o).trim()+"\\n";break;case"H1":t+=\`# \${e(o)}\\n\\n\`;break;case"H2":t+=\`## \${e(o)}\\n\\n\`;break;case"H3":t+=\`### \${e(o)}\\n\\n\`;break;case"UL":case"OL":const s=Array.from(o.children).map((t,s)=>("OL"===o.nodeName?\`\${s+1}. \`:"* ")+e(t).trim()).join("\\n");t+=\`\\n\${s}\\n\\n\`;break;case"LI":t+=e(o);break;case"STRONG":case"B":t+=\`**\${e(o)}**\`;break;case"EM":case"I":t+=\`*\${e(o)}*\`;break;case"BLOCKQUOTE":const n=e(o).trim().split("\\n").map(e=>\`> \${e}\`).join("\\n");t+=\`\\n\${n}\\n\\n\`;break;case"PRE":const a=o.querySelector(".justify-between")?.innerText.trim()||"js",r=o.querySelector("code")?.innerText||"";t+=\`\\n\\\`\`\`\${a}\\n\${r.trim()}\\n\\\`\`\`\\n\\n\`;break;case"CODE":o.parentElement.nodeName!=="PRE"&&(t+=\`\\\`\${o.textContent}\\\`\`);break;case"BR":t+="\\n";break;case"HR":t+="\\n---\\n\\n";break;default:o.hasChildNodes()&&(t+=e(o))}}),t}const t=document.querySelectorAll('[data-testid^="conversation-turn-"]'),o=[];let s=document.title||"محادثة ChatGPT";const n=new Date().toISOString();o.push("---"),o.push(\`title: "\${s.replace(/"/g,'\\\\"')}"\`),o.push(\`tags: [محادثة, chatgpt-export, \${s.replace(/\\s+/g,"-").toLowerCase()}]\`),o.push(\`date: \${n}\`),o.push("---"),o.push(\`\\n# 📜 \${s}\\n\`),t.forEach(t=>{const s=t.querySelector('div[data-message-author-role="user"] .whitespace-pre-wrap'),n=t.querySelector('div[data-message-author-role="assistant"] .markdown.prose');if(s&&s.innerText.trim()){const t=s.innerText.trim();o.push("> [!QUESTION] 🧑‍💻 سؤال المستخدم"),t.split("\\n").forEach(e=>{o.push(\`> \${e}\`)}),o.push("\\n")}else if(n){const t=e(n).trim();o.push("> [!TIP] 🤖 رد المساعد"),t.split("\\n").forEach(e=>{""===e.trim()&&t.includes("\\n\\n")?o.push(">"):""!==e.trim()&&o.push(\`> \${e}\`)}),o.push("\\n")}}),o.length<=4?console.error("😔 لم يتم العثور على محتوى. هل أنت في صفحة المحادثة؟"):void 0===(s=s.replace(/[\\/\\\\?%*:|\\"<>]/g,"-").replace(/\\s+/g," "))||(s=s.replace(/[\\/\\\\?%*:|\\"<>]/g,"-").replace(/\\s+/g," "));const a=URL.createObjectURL(new Blob([o.join("\\n").replace(/\\n{3,}/g,"\\n\\n")],{type:"text/markdown;charset=utf-8"})),r=document.createElement("a");r.href=a,r.download=\`\${s}.md\`,document.body.appendChild(r),r.click(),document.body.removeChild(r),URL.revokeObjectURL(a),console.log(\`✅🎉 تمت العملية بنجاح! تم تحميل ملف "\${r.download}" بتنسيق Obsidian Callouts الاحترافي.\`)})();`,
+
+            'obsidian-simple': `(function(){console.log("🚀 بدء استخراج المحادثة وتنسيقها لبرنامج Obsidian...");function e(e){let t="";return Array.from(e.childNodes).forEach((o,s)=>{switch(o.nodeName){case"#text":t+=o.textContent;break;case"P":t+="\\n"+e(o).trim()+"\\n";break;case"H2":t+=\`## \${e(o)}\\n\\n\`;break;case"H3":t+=\`### \${e(o)}\\n\\n\`;break;case"UL":case"OL":const n=Array.from(o.children).map((t,s)=>("OL"===o.nodeName?\`\${s+1}. \`:"* ")+e(t).trim()).join("\\n");t+=\`\\n\${n}\\n\\n\`;break;case"LI":t+=e(o);break;case"STRONG":case"B":t+=\`**\${e(o)}**\`;break;case"EM":case"I":t+=\`*\${e(o)}*\`;break;case"BLOCKQUOTE":const a=e(o).trim().split("\\n").map(e=>\`> \${e}\`).join("\\n");t+=\`\\n\${a}\\n\\n\`;break;case"PRE":const r=o.querySelector(".justify-between")?.innerText.trim()||"javascript",c=o.querySelector("code")?.innerText||"";t+=\`\\n\\\`\`\`\${r}\\n\${c.trim()}\\n\\\`\`\`\\n\\n\`;break;case"CODE":o.parentElement.nodeName!=="PRE"&&(t+=\`\\\`\${o.textContent}\\\`\`);break;case"BR":t+="\\n";break;case"HR":t+="\\n---\\n\\n";break;default:o.hasChildNodes()&&(t+=e(o))}}),t}const t=document.querySelectorAll('[data-testid^="conversation-turn-"]'),o=[];let s=document.title||"محادثة ChatGPT";const n=new Date().toISOString();o.push("---"),o.push(\`title: "\${s}"\`),o.push("tags: [محادثة, chatgpt-export]"),o.push(\`date: \${n}\`),o.push("---"),o.push(\`\\n# 📜 \${s}\\n\`),t.forEach(t=>{const s=t.querySelector('div[data-message-author-role="user"] .whitespace-pre-wrap'),n=t.querySelector('div[data-message-author-role="assistant"] .markdown.prose');s&&s.innerText.trim()?(o.push("\\n### 🧑‍💻 المستخدم\\n"),o.push(\`> \${s.innerText.trim().replace(/\\n/g,"\\n> ")}\\n\`)):n&&(o.push("\\n### 🤖 المساعد\\n"),o.push(e(n).trim()+"\\n")),o.push("---\\n")}),o.length<=4?console.error("😔 لم يتم العثور على محتوى. هل أنت في صفحة المحادثة؟"):void 0===(s=s.replace(/[\\/\\\\?%*:|\\"<>]/g,"-").replace(/\\s+/g," "))||(s=s.replace(/[\\/\\\\?%*:|\\"<>]/g,"-").replace(/\\s+/g," "));const a=URL.createObjectURL(new Blob([o.join("\\n").replace(/\\n{3,}/g,"\\n\\n")],{type:"text/markdown;charset=utf-8"})),r=document.createElement("a");r.href=a,r.download=\`\${s}.md\`,document.body.appendChild(r),r.click(),document.body.removeChild(r),URL.revokeObjectURL(a),console.log(\`✅🎉 تمت العملية بنجاح! تم تحميل ملف "\${r.download}" المتوافق مع Obsidian.\`)})();`,
+
+            'markdown-generic': `(function(){console.log("🚀 بدء عملية استخراج المحادثة لتحويلها إلى ملف Markdown...");function e(e){let t="";return Array.from(e.childNodes).forEach((o,s)=>{switch(o.nodeName){case"#text":t+=o.textContent;break;case"P":t+="\\n"+e(o)+"\\n";break;case"H2":t+=\`## \${e(o)}\\n\\n\`;break;case"UL":t+=e(o);break;case"OL":const n=Array.from(o.childNodes);n.forEach((o,s)=>{o.nodeName==="LI"&&(t+=\`\${s+1}. \${e(o)}\\n\`)});break;case"LI":t+=\`* \${e(o)}\\n\`;break;case"STRONG":case"B":t+=\`**\${e(o)}**\`;break;case"EM":case"I":t+=\`*\${e(o)}*\`;break;case"BLOCKQUOTE":const a=e(o).trim().split("\\n").map(e=>\`> \${e}\`).join("\\n");t+=\`\\n\${a}\\n\\n\`;break;case"PRE":const r=o.querySelector(".justify-between")?.innerText.trim()||"code",c=o.querySelector("code")?.innerText||"";t+=\`\\n\\\`\`\`\${r}\\n\${c.trim()}\\n\\\`\`\`\\n\\n\`;break;case"CODE":o.parentElement.nodeName!=="PRE"&&(t+=\`\\\`\${o.textContent}\\\`\`);break;case"BR":t+="\\n";break;case"HR":t+="\\n---\\n\\n";break;default:t+=e(o)}}),t}const t=document.querySelectorAll('[data-testid^="conversation-turn-"]'),o=[];let s=document.title||"محادثة ChatGPT";o.push(\`# 📜 \${s}\\n\`),t.forEach((t,s)=>{const n=t.querySelector('div[data-message-author-role="user"] .whitespace-pre-wrap'),a=t.querySelector('div[data-message-author-role="assistant"] .markdown.prose');n?o.push("### 🧑‍💻 المستخدم\\n",n.innerText.trim()+"\\n"):a&&(o.push("### 🤖 المساعد\\n"),o.push(e(a).trim()+"\\n")),o.push("---\\n")}),o.length<=2?console.error("😔 لم يتم العثور على محتوى. هل أنت في صفحة المحادثة؟"):void 0===(s=s.replace(/[^a-z0-9א-ת一-龠]/gi,"-").toLowerCase())||(s=s.replace(/[^a-z0-9א-ת一-龠]/gi,"-").toLowerCase());const n=new Date().toISOString().slice(0,10),a=URL.createObjectURL(new Blob([o.join("\\n")],{type:"text/markdown;charset=utf-8"})),r=document.createElement("a");r.href=a,r.download=\`\${s}-\${n}.md\`,document.body.appendChild(r),r.click(),document.body.removeChild(r),URL.revokeObjectURL(a),console.log(\`✅🎉 نجحت العملية! تم بدء تحميل ملف "\${r.download}".\`)})();`
+        };
+
+        // --- Animation on Scroll ---
+        const cards = document.querySelectorAll('.script-card');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+        cards.forEach(card => {
+            observer.observe(card);
+        });
+
+        // --- Copy to Clipboard Functionality ---
+        const copyButtons = document.querySelectorAll('.btn[data-script]');
+        
+        copyButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const scriptKey = button.dataset.script;
+                const scriptContent = scripts[scriptKey];
+
+                if (scriptContent) {
+                    navigator.clipboard.writeText(scriptContent).then(() => {
+                        // Success feedback
+                        const originalText = button.innerHTML;
+                        button.innerHTML = `تم النسخ! <i class="fas fa-check"></i>`;
+                        button.style.background = '#28a745';
+
+                        setTimeout(() => {
+                            button.innerHTML = originalText;
+                            button.style.background = ''; // Revert to original gradient
+                        }, 2000);
+
+                    }).catch(err => {
+                        // Error feedback
+                        console.error('Failed to copy: ', err);
+                        alert('حدث خطأ أثناء النسخ!');
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
